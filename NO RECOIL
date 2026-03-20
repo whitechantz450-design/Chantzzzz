@@ -47,32 +47,29 @@ function OnEvent(event, arg)
         if RequireToggle then
             if IsKeyLockOn(ToggleKey) then
                 while IsMouseButtonPressed(3) do
-                    local startTime = GetRunningTime() -- Reset timer wanneer MB3 wordt ingedrukt
+                    local startTime = GetRunningTime()
                     while IsMouseButtonPressed(3) and IsMouseButtonPressed(1) do
                         local currentTime = GetRunningTime()
                         local elapsedTime = currentTime - startTime
-                        if elapsedTime >= 50 then  -- Alleen recoil toepassen na 20 ms
+                        if elapsedTime >= 50 then 
                             if elapsedTime < 500 then
-                                -- Voor 0.5 seconde: verticale en originele horizontale kracht
                                 MoveMouseRelative(RcHorizontalStrength, RecoilControlStrength)
                             else
-                                -- Na 0.5 seconde: voeg extra horizontale kracht toe
                                 MoveMouseRelative(RcHorizontalStrength + RcCustomThirdForce, RecoilControlStrength)
                             end
                         end
                         Sleep(DelayRate)
                     end
-                    -- Reset wanneer knoppen niet samen worden ingedrukt
                     Sleep(DelayRate)
                 end
             end
         else
             while IsMouseButtonPressed(3) do
-                local startTime = GetRunningTime() -- Reset timer wanneer MB3 wordt ingedrukt
+                local startTime = GetRunningTime()
                 while IsMouseButtonPressed(3) and IsMouseButtonPressed(1) do
                     local currentTime = GetRunningTime()
                     local elapsedTime = currentTime - startTime
-                    if elapsedTime >= 50 then  -- Alleen recoil toepassen na 20 ms
+                    if elapsedTime >= 50 then
                         if elapsedTime < 1000 then
                             MoveMouseRelative(RcHorizontalStrength, RecoilControlStrength)
                         else
