@@ -1,0 +1,89 @@
+--1200 dpi, Normal multiplier (0.020000) 5 5 sens 50-55
+--Ops like Ak-12 or azami gun or r4c requir some pulling to the left but just get in the habit of pulling down no matter if you have a script or not.
+EnableRCS = true
+RecoilControlMode = "Azami"
+Smg12Strength = 25  -- Vert Strength
+ValkStrength = 13
+AceStrength = 23
+NomadStrength = 18
+R4CStrength = 25
+AzamiStrength = 8
+RcHorizontalStrength = 1  -- Horizontal Strength
+RcCustomThirdForce = 0  -- Extra Horizontal Strength
+RequireToggle = true
+ToggleKey = "CapsLock"
+DelayRate = 7  -- Delay (DONT CHANGE IF YOU DONT KNOW WHAT YOU ARE DOING)
+
+------------- Recoil Presets ------
+if RecoilControlMode == "Low" then
+    RecoilControlStrength = 2
+elseif RecoilControlMode == "Medium" then
+    RecoilControlStrength = 6
+elseif RecoilControlMode == "High" then
+    RecoilControlStrength = 8
+elseif RecoilControlMode == "Ultra" then
+    RecoilControlStrength = 10
+elseif RecoilControlMode == "Insanity" then
+    RecoilControlStrength = 20
+elseif RecoilControlMode == "SMG12" then
+    RecoilControlStrength = Smg12Strength
+elseif RecoilControlMode == "Valk" then
+RecoilControlStrength = ValkStrength
+elseif RecoilControlMode == "Ace" then
+RecoilControlStrength = AceStrength
+elseif RecoilControlMode == "Nomad" then
+RecoilControlStrength = NomadStrength
+elseif RecoilControlMode == "R4-C" then
+RecoilControlStrength = R4CStrength
+elseif RecoilControlMode == "Azami" then
+RecoilControlStrength = AzamiStrength
+end
+
+--------------------------------------
+EnablePrimaryMouseButtonEvents(true);
+
+function OnEvent(event, arg)
+    if EnableRCS then
+        if RequireToggle then
+            if IsKeyLockOn(ToggleKey) then
+                while IsMouseButtonPressed(3) do
+                    local startTime = GetRunningTime() -- Reset timer wanneer MB3 wordt ingedrukt
+                    while IsMouseButtonPressed(3) and IsMouseButtonPressed(1) do
+                        local currentTime = GetRunningTime()
+                        local elapsedTime = currentTime - startTime
+                        if elapsedTime >= 50 then  -- Alleen recoil toepassen na 20 ms
+                            if elapsedTime < 500 then
+                                -- Voor 0.5 seconde: verticale en originele horizontale kracht
+                                MoveMouseRelative(RcHorizontalStrength, RecoilControlStrength)
+                            else
+                                -- Na 0.5 seconde: voeg extra horizontale kracht toe
+                                MoveMouseRelative(RcHorizontalStrength + RcCustomThirdForce, RecoilControlStrength)
+                            end
+                        end
+                        Sleep(DelayRate)
+                    end
+                    -- Reset wanneer knoppen niet samen worden ingedrukt
+                    Sleep(DelayRate)
+                end
+            end
+        else
+            while IsMouseButtonPressed(3) do
+                local startTime = GetRunningTime() -- Reset timer wanneer MB3 wordt ingedrukt
+                while IsMouseButtonPressed(3) and IsMouseButtonPressed(1) do
+                    local currentTime = GetRunningTime()
+                    local elapsedTime = currentTime - startTime
+                    if elapsedTime >= 50 then  -- Alleen recoil toepassen na 20 ms
+                        if elapsedTime < 1000 then
+                            MoveMouseRelative(RcHorizontalStrength, RecoilControlStrength)
+                        else
+                            MoveMouseRelative(RcHorizontalStrength + RcCustomThirdForce, RecoilControlStrength)
+                        end
+                    end
+                    Sleep(DelayRate)
+                end
+                -- Reset
+                Sleep(DelayRate)
+            end
+        end
+    end
+end
