@@ -1,7 +1,7 @@
 --1200 dpi, Normal multiplier (0.020000) 5 5 sens 50-55
---Ops like Ak-12 or azami gun or r4c require some pulling to the left but just get in the habit of pulling down no matter if you have a script or not.
+--SOME OPS ONLY HAVE COMPENSATION NOT JUST TRUE ZERO RECOIL LIKE THE SMG11 OPS OPS LIKE ACE, FUZE, NOMAD, ASH, REQUIRE A TEENY TINY AMOUNT OF PULLING DOWN TO THE LEFT
 EnableRCS = true
-RecoilControlMode = "Azami"
+RecoilControlMode = "SMG12"
 Smg12Strength = 25  -- Vert Strength
 ValkStrength = 13
 AceStrength = 23
@@ -47,29 +47,32 @@ function OnEvent(event, arg)
         if RequireToggle then
             if IsKeyLockOn(ToggleKey) then
                 while IsMouseButtonPressed(3) do
-                    local startTime = GetRunningTime()
+                    local startTime = GetRunningTime() -- Reset timer wanneer MB3 wordt ingedrukt
                     while IsMouseButtonPressed(3) and IsMouseButtonPressed(1) do
                         local currentTime = GetRunningTime()
                         local elapsedTime = currentTime - startTime
-                        if elapsedTime >= 50 then 
+                        if elapsedTime >= 50 then  -- Alleen recoil toepassen na 20 ms
                             if elapsedTime < 500 then
+                                -- Voor 0.5 seconde: verticale en originele horizontale kracht
                                 MoveMouseRelative(RcHorizontalStrength, RecoilControlStrength)
                             else
+                                -- Na 0.5 seconde: voeg extra horizontale kracht toe
                                 MoveMouseRelative(RcHorizontalStrength + RcCustomThirdForce, RecoilControlStrength)
                             end
                         end
                         Sleep(DelayRate)
                     end
+                    -- Reset wanneer knoppen niet samen worden ingedrukt
                     Sleep(DelayRate)
                 end
             end
         else
             while IsMouseButtonPressed(3) do
-                local startTime = GetRunningTime()
+                local startTime = GetRunningTime() -- Reset timer wanneer MB3 wordt ingedrukt
                 while IsMouseButtonPressed(3) and IsMouseButtonPressed(1) do
                     local currentTime = GetRunningTime()
                     local elapsedTime = currentTime - startTime
-                    if elapsedTime >= 50 then
+                    if elapsedTime >= 50 then  -- Alleen recoil toepassen na 20 ms
                         if elapsedTime < 1000 then
                             MoveMouseRelative(RcHorizontalStrength, RecoilControlStrength)
                         else
